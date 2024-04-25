@@ -1,0 +1,46 @@
+.logo {
+    width:32px;
+    height:32px;
+    border-radius:150px;
+    display: inline-block;
+    overflow: hidden;
+    border: none;
+  }
+     
+  .titulo {
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    border: none;
+    font: normal normal 18px/1 Verdana, Geneva, sans-serif;
+    color: rgba(20,61,127,1);
+    text-indent: 1px;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    letter-spacing: 1px;
+  }
+  .subtitulo{
+      display: inline-block;
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+      border: none;
+      font: normal normal 14px/1 Tahoma, Geneva, sans-serif;
+      color: rgba(0,0,0,1);
+      text-indent: 1px;
+      -o-text-overflow: ellipsis;
+      text-overflow: ellipsis;
+      letter-spacing: 1px;
+  }
+  body{
+    margin: 0;
+    padding: 0;
+    background-image: url(../img/fondo3.png);
+    background-repeat: repeat;
+    background-position: center center;
+    height:120%;
+    background-size: cover;
+  }
+
+  
