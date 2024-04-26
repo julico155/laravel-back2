@@ -67,7 +67,7 @@
                                         @if ($opcion)
                                             <a wire:click="compartirProyecto('{{ $proyecto->codigo }}')" class="myButtonShare">Compartir</a>
                                         @endif
-                                        <a href="http://3.136.17.144:8080/uml-sequence?room={{ $proyecto->codigo }}&username={{ auth()->user()->token }}" class="myButton">Ingresar</a>
+                                        <a href="http://3.144.74.15:8080/uml-sequence?room={{ $proyecto->codigo }}&username={{ auth()->user()->token }}" class="myButton">Ingresar</a>
                                     </div>
                                 </div>
                             </div>
