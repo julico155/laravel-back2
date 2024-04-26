@@ -67,6 +67,10 @@
                                         @if ($opcion)
                                             <a wire:click="compartirProyecto('{{ $proyecto->codigo }}')" class="myButtonShare">Compartir</a>
                                         @endif
+                                        <a href="{{ route('descargarCodigoPhp', ['codigo' => $proyecto->codigo]) }}" class="btn btn-sm btn-primary">Descargar Php</a>
+                                        <a href="{{ route('descargarCodigoPython', ['codigo' => $proyecto->codigo]) }}" class="btn btn-sm btn-primary">Descargar Python</a>
+                                        <a href="{{ route('descargarCodigoJava', ['codigo' => $proyecto->codigo]) }}" class="btn btn-sm btn-primary">Descargar Java</a>
+
                                         <a href="http://3.144.74.15:8080/uml-sequence?room={{ $proyecto->codigo }}&username={{ auth()->user()->token }}" class="myButton">Ingresar</a>
                                     </div>
                                 </div>

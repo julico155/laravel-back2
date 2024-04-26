@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\ProyectoController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -21,3 +22,11 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home2', [App\Http\Controllers\HomeController::class, 'index2'])->name('home2');
+
+Route::get('/descargar-codigo-java/{codigo}', [ProyectoController::class, 'descargarCodigoJava'])->name('descargarCodigoJava');
+
+Route::get('/descargar-codigo-php/{codigo}', [ProyectoController::class, 'descargarCodigoPhp'])->name('descargarCodigoPhp');
+
+Route::get('/descargar-codigo-python/{codigo}', [ProyectoController::class, 'descargarCodigoPython'])->name('descargarCodigoPython');
+
+
