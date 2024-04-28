@@ -71,7 +71,7 @@
                                         <a href="{{ route('descargarCodigoPython', ['codigo' => $proyecto->codigo]) }}" class="btn btn-sm btn-primary">Descargar Python</a>
                                         <a href="{{ route('descargarCodigoJava', ['codigo' => $proyecto->codigo]) }}" class="btn btn-sm btn-primary">Descargar Java</a>
 
-                                        <a href="http://18.223.2.7/:8080/uml-sequence?room={{ $proyecto->codigo }}&username={{ auth()->user()->token }}" class="myButton">Ingresar</a>
+                                        <a href="http://18.223.2.7:8080/uml-sequence?room={{ $proyecto->codigo }}&username={{ auth()->user()->token }}" class="myButton">Ingresar</a>
                                     </div>
                                 </div>
                             </div>
