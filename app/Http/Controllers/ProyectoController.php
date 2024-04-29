@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Response;
 use App\Models\Proyecto;
 use App\Models\User;
 use Illuminate\Http\Request;
+use DOMDocument;
 
 class ProyectoController extends Controller
 {
@@ -39,13 +40,20 @@ class ProyectoController extends Controller
         return "hubo un error";
     }
 
-    public function exportarjava($codigo){
+    public function exportarjava($codigo) {
         // Obtener el proyecto
         $proyecto = Proyecto::where('codigo', $codigo)->first();
     
         // Obtener los atributos del proyecto
         $nombreProyecto = $proyecto->nombre;
         $contenidoProyecto = $proyecto->content;
+    
+        // Verificar si el contenido XML es válido
+        if (!$this->isXMLContentValid($contenidoProyecto)) {
+            // Manejar el caso de contenido XML no válido
+            // Puedes mostrar un mensaje de error o tomar otra acción
+            return "Error: El contenido XML no es válido.";
+        }
     
         // Parsear el contenido XML del proyecto
         $xml = simplexml_load_string($contenidoProyecto);
@@ -56,26 +64,41 @@ class ProyectoController extends Controller
         $javaCode .= "public class $nombreProyecto {\n";
     
         foreach ($cells as $cell) {
-            $id = (string) $cell['id'];
-            $value = (string) $cell['value'];
-            $style = (string) $cell['style'];
-            $geometry = $cell->mxGeometry->attributes();
+            $style = (string)$cell->attributes()->style;
+            $value = (string)$cell->attributes()->value;
     
-            // Crear instancias de objetos basados en las lifelines
-            if (strpos($style, 'umlLifeline') !== false) {
-                $javaCode .= "\n\t// Object instance for lifeline $id: $value\n";
-                $javaCode .= "\tprivate $value $value$id = new $value();\n";
-                $javaCode .= "\t// Geometry: x=" . $geometry['x'] . ", y=" . $geometry['y'] . ", width=" . $geometry['width'] . ", height=" . $geometry['height'] . "\n";
+            // Verificar si el nodo es un umlFrame
+            if (strpos($style, "shape=umlFrame") !== false) {
+                // Generar el método void con el nombre igual al valor del nodo umlFrame
+                $javaCode .= "    void $value(String x) {\n";
+    
+                // Generar el bloque if-else para cada opción dentro del umlFrame
+                $javaCode .= "        if (x.equals(\"$value\")) {\n";
+                $javaCode .= "            // Código para la opción $value\n";
+                $javaCode .= "        } else {\n";
+                $javaCode .= "            // Código para las demás opciones\n";
+                $javaCode .= "        }\n";
+    
+                // Cerrar el método void
+                $javaCode .= "    }\n";
+            } else if (strpos($style, "endArrow=block") !== false) {
+                // Si el estilo incluye "endArrow=block", trata este nodo como una flecha de mensaje
+                // Generar un método void con el nombre igual al valor del nodo
+                $javaCode .= "    void $value() {\n    }\n";
+            } else if (strpos($style, "umlLifeline") !== false) {
+                // Si el estilo incluye "umlLifeline", trata este nodo como una clase
+                $javaCode .= "    class $value {\n";
+            } else if (strpos($style, "umlActor") !== false) {
+                // Si el estilo incluye "umlActor", trata este nodo como una clase
+                $javaCode .= "    class $value {\n";
+            } else {
+                // Otros nodos o estilos pueden manejarse aquí según sea necesario
+                // Por ahora, solo los ignoraremos
+                continue;
             }
     
-            // Crear instancias de métodos basados en las flechas (edges)
-            if (strpos($style, 'edge') !== false) {
-                $source = (string) $cell->mxGeometry->mxPoint[0]->attributes()->{'x'};
-                $target = (string) $cell->mxGeometry->mxPoint[1]->attributes()->{'x'};
-                $methodName = "method$id"; // Nombre del método basado en el ID
-                $method = "void $methodName() {\n\t// Logic for arrow from $source to $target\n}\n";
-                $javaCode .= "\n\t// Method instance for arrow $id\n$method";
-            }
+            // Cierre de la declaración de clase o función
+            $javaCode .= "    }\n";
         }
     
         $javaCode .= "}\n";
@@ -83,6 +106,23 @@ class ProyectoController extends Controller
         // Devolver el código Java generado
         return $javaCode;
     }
+      
+    
+    // Función para validar el contenido XML
+    public function isXMLContentValid($xmlContent) {
+        if (trim($xmlContent) == '') {
+            return false;
+        }
+    
+        libxml_use_internal_errors(true);
+        $doc = new DOMDocument();
+        $doc->loadXML($xmlContent);
+        $errors = libxml_get_errors();
+        libxml_clear_errors();
+    
+        return empty($errors);
+    }
+    
 
     public function exportarphp($codigo){
         // Obtener el proyecto
