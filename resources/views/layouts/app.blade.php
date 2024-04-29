@@ -22,12 +22,12 @@
     @livewireStyles
 </head>
 <body>
-    <div id="app">
+    <div id="app container-green-bg ">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img class="logo" src="{{asset('img/logo.png')}}" alt="">
-                    <div class="titulo">UML Diagramador</div>
+                    <div class="titulo">Diagramer</div>
                     
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -80,7 +80,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4 container-green-bg">
             @yield('content')
         </main>
     </div>

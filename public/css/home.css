@@ -1,7 +1,7 @@
 .layout {
   width: 100%;
   display: flex;
-  gap: 16px;
+  gap: 12px;
 }
 
 .marginLeft {
@@ -13,7 +13,7 @@
   padding: 0;
   border: 0;
   background: none;
-  width: 25px;
+  width: 75px;
 }
 
 .img {
@@ -21,60 +21,53 @@
 }
 
 .myButton {
-  background: linear-gradient(to bottom, #00d4ff 5%, #00d4ff 100%);
-  background-color: #00d4ff;
+  background: linear-gradient(to bottom, #7ab648 5%, #7ab648 100%);
+  background-color: #7ab648;
   border-radius: 8px;
   display: inline-block;
   cursor: pointer;
   color: #ffffff;
-  font-family: Trebuchet MS;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: bold;
   padding: 5px 14px;
   text-decoration: none;
+  border: none;
+  transition: background-color 0.3s ease;
+}
 
-  &:hover {
-    background: linear-gradient(to bottom, #E6E8F1 5%, #E6E8F1 100%);
-    background-color: #E6E8F1;
-  }
-
-  &:active {
-    position: relative;
-    top: 1px;
-  }
+.myButton:hover {
+  background: linear-gradient(to bottom, #5e8e3e 5%, #5e8e3e 100%);
+  background-color: #5e8e3e;
 }
 
 .myButtonShare {
-  background: linear-gradient(to bottom, #F7B40B 5%, #ffc22899 100%);
-  background-color: #F7B40B;
+  background: linear-gradient(to bottom, #f7b40b 5%, #ffc22899 100%);
+  background-color: #f7b40b;
   border-radius: 8px;
   display: inline-block;
   cursor: pointer;
   color: #ffffff;
-  font-family: Trebuchet MS;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: bold;
   padding: 5px 14px;
   text-decoration: none;
+  border: none;
+  transition: background-color 0.3s ease;
+}
 
-  &:hover {
-    background: linear-gradient(to bottom, #E6E8F1 5%, #E6E8F1 100%);
-    background-color: #E6E8F1;
-  }
-
-  &:active {
-    position: relative;
-    top: 1px;
-  }
+.myButtonShare:hover {
+  background: linear-gradient(to bottom, #e6e8f1 5%, #e6e8f1 100%);
+  background-color: #e6e8f1;
 }
 
 .titulo-proyecto {
-  font: normal normal bold 46px/1 Verdana, Geneva, sans-serif;
-  color: #50C5D7;
+  font: normal normal bold 46px/1 'Open Sans', sans-serif;
+  color: #7ab648;
   text-align: center;
   text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.178);
 }
-
 
 .enjoy-css {
   -webkit-box-sizing: content-box;
@@ -82,59 +75,72 @@
   box-sizing: content-box;
   height: 90px;
   border: none;
-  -webkit-border-radius: 0 0 30px 30px;
   border-radius: 0 0 30px 30px;
   font: normal 16px/1 "Times New Roman", Times, serif;
   color: black;
-  -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  background: -webkit-linear-gradient(0deg, rgba(183, 222, 237, 1) 0, rgba(113, 206, 239, 1) 50%, rgba(33, 180, 226, 1) 51%, rgba(183, 222, 237, 1) 100%);
-  background: -moz-linear-gradient(90deg, rgba(183, 222, 237, 1) 0, rgba(113, 206, 239, 1) 50%, rgba(33, 180, 226, 1) 51%, rgba(183, 222, 237, 1) 100%);
   background: linear-gradient(90deg, rgba(183, 222, 237, 1) 0, rgba(113, 206, 239, 1) 50%, rgba(33, 180, 226, 1) 51%, rgba(183, 222, 237, 1) 100%);
   background-position: 50% 50%;
-  -webkit-background-origin: padding-box;
   background-origin: padding-box;
-  -webkit-background-clip: border-box;
   background-clip: border-box;
-  -webkit-background-size: auto auto;
   background-size: auto auto;
 }
 
 .boton-crear {
   display: inline-block;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
   cursor: pointer;
   padding: 10px 20px;
   border: none;
-  -webkit-border-radius: 20px;
   border-radius: 20px;
   font: normal 12px/normal Arial Black, Gadget, sans-serif;
   color: rgba(255, 255, 255, 0.9);
-  -o-text-overflow: clip;
-  text-overflow: clip;
-  background: #0199d9;
+  background: #f7b40b;
+  transition: background-color 0.3s ease;
 }
 
-.padre {
-  height: 150px;
-  /*IMPORTANTE*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.boton-crear:hover {
+  background: #e6e8f1;
 }
 
-.hijo {
-  width: 120px;
+
+select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  appearance: none; /* Esto elimina la apariencia predeterminada del navegador */
+  -webkit-appearance: none; /* Esto es para navegadores WebKit como Chrome y Safari */
+  -moz-appearance: none; /* Esto es para navegadores Firefox */
 }
 
-/* .contenedor{
-    height: 500px;
-    width: 100%;
-    overflow: scroll;
-    overflow-x: hidden;
-  }
-  @media screen and (max-height: 915px) {
-    
-} */
+/* Estilo al pasar el mouse sobre las opciones */
+select:hover {
+  background-color: #f9f9f9;
+}
+
+/* Estilo cuando está enfocado */
+select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Estilo para las opciones */
+select option {
+  padding: 10px;
+}
+
+
+.button-container {
+  margin-bottom: 10px; /* Ajusta según sea necesario */
+}
+
+.select-container {
+  margin-top: 10px; /* Ajusta según sea necesario */
+}
+
+
+.container-green-bg {
+  background-color: rgba(0, 128, 0, 0.5); /* Verde con opacidad del 50% */
+}

@@ -5,15 +5,14 @@
         <link rel="stylesheet" href="{{ asset('css/home.css') }}">
         <script src="{{ asset('js/home.js') }}"></script>
     </head>
-    <div class="container">
+    <div class="container ">
         <ul class="nav nav-tabs card-header-tabs mx-2 my-4">
             <li class="nav-item">
-                <a wire:click="$set('opcion', true)" class="nav-link @if ($opcion) active @endif">Mis
-                    proyectos</a>
+                <a wire:click="$set('opcion', true)" class="nav-link @if ($opcion) active @endif">Proyectos</a>
             </li>
             <li class="nav-item">
                 <a wire:click="$set('opcion', false)"
-                    class="nav-link @if (!$opcion) active @endif">Mis colaboraciones</a>
+                    class="nav-link @if (!$opcion) active @endif">Donde Colaboro</a>
             </li>
         </ul>
         <div align="right">
@@ -30,48 +29,45 @@
             <div class="container">
                 <div class="row justify-content-center">
                     @forelse ($proyectos as $proyecto)
-                        <div class="col-12 col-md-4 align-self-center">
+                        <div class="col align-self-center">
                             <div class="card my-2 mx-4">
                                 <div class="card-header">
                                     <section class="layout">
-                                        <div><b>{{ $proyecto->nombre }}</b>
+                                        <div>
+                                            <b>Nombre Proyecto: {{ $proyecto->nombre }}</b>
                                             @if (!$opcion)
-                                                - creado por: {{ $proyecto->user->name }}
+                                                -Dueño: {{ $proyecto->user->name }}
                                             @endif
                                         </div>
                                         @if ($opcion)
                                             <div class="marginLeft">
-                                                <button wire:click="verProyecto('{{ $proyecto->id }}')" class="boton">
-                                                    <img class="img" src="{{ asset('img/grupo.png') }}">
-                                                </button>
+                                                <button wire:click="verProyecto('{{ $proyecto->id }}')" class="boton">Ver edit</button>
                                             </div>
                                             <div>
-                                                <button wire:click="modalEdit('{{ $proyecto->id }}')" class="boton">
-                                                    <img class="img" src="{{ asset('img/lapiz.png') }}">
-                                                </button>
+                                                <button wire:click="modalEdit('{{ $proyecto->id }}')" class="boton">Editar</button>
                                             </div>
                                             <div>
-                                                <button wire:click="modalDestroy('{{ $proyecto->id }}')" class="boton">
-                                                    <img class="img" src="{{ asset('img/eliminar.png') }}">
-                                                </button>
+                                                <button wire:click="modalDestroy('{{ $proyecto->id }}')" class="boton">Eliminar</button>
                                             </div>
                                         @endif
                                     </section>
                                 </div>
                                 <div class="card-body">
-                                    <div class="input-group">
-                                        <label>Descripcion:
-                                            <b>{{ $proyecto->descripcion }}</b></label>
-                                    </div>
                                     <div align="center" class="mt-4">
-                                        @if ($opcion)
-                                            <a wire:click="compartirProyecto('{{ $proyecto->codigo }}')" class="myButtonShare">Compartir</a>
-                                        @endif
-                                        <a href="{{ route('descargarCodigoPhp', ['codigo' => $proyecto->codigo]) }}" class="btn btn-sm btn-primary">Descargar Php</a>
-                                        <a href="{{ route('descargarCodigoPython', ['codigo' => $proyecto->codigo]) }}" class="btn btn-sm btn-primary">Descargar Python</a>
-                                        <a href="{{ route('descargarCodigoJava', ['codigo' => $proyecto->codigo]) }}" class="btn btn-sm btn-primary">Descargar Java</a>
-
-                                        <a href="http://18.223.2.7:8080/uml-sequence?room={{ $proyecto->codigo }}&username={{ auth()->user()->token }}" class="myButton">Ingresar</a>
+                                        <div class="button-container">
+                                            @if ($opcion)
+                                                <a wire:click="compartirProyecto('{{ $proyecto->codigo }}')" class="myButtonShare">Compartir</a>
+                                            @endif
+                                            <a href="http://18.223.2.7:8080/uml-sequence?room={{ $proyecto->codigo }}&username={{ auth()->user()->token }}" class="myButton">Ingresar</a>
+                                        </div>
+                                        <div class="select-container">
+                                            <select onchange="window.location.href=this.value;">
+                                                <option value="" selected disabled>Descargar Codigo</option>
+                                                <option value="{{ route('descargarCodigoJava', ['codigo' => $proyecto->codigo]) }}">Descargar Código Java</option>
+                                                <option value="{{ route('descargarCodigoPhp', ['codigo' => $proyecto->codigo]) }}">Descargar Código PHP</option>
+                                                <option value="{{ route('descargarCodigoPython', ['codigo' => $proyecto->codigo]) }}">Descargar Código Python</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +77,7 @@
                 </div>
             </div>
         </div>
-        
+                
     </div>
     {{-- crear proyecto --}}
     @if ($modalCrear)
@@ -215,7 +211,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title">Clave del proyecto:</h5>
                             <button wire:click="cancelar()" class="boton">
-                                <img class="img" src="{{ asset('img/salir.png') }}">
+                                <p>Salir</p>
                             </button>
                         </div>
                         <div class="modal-body">

@@ -13,9 +13,7 @@
 </head>
 <div class="login">
     <div class="login__content">
-        <div class="login__img">
-            <img src="{{asset('img/logo.png')}}" alt="">
-        </div>
+
 
         <div class="login__forms">
             <form method="POST" action="{{ route('login') }}" class="login__registre" id="login-in">
