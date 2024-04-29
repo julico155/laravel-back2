@@ -265,7 +265,7 @@ class ProyectoController extends Controller
         $proyecto = Proyecto::where('codigo', $codigo)->first();
     
         // Generar el código Java
-        $codigoJava = $this->exportarjava($codigo);
+        $codigoJava = $this->exportarphp($codigo);
     
         // Devolver la respuesta de descarga
         return response($codigoJava)
