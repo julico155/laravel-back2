@@ -124,13 +124,20 @@ class ProyectoController extends Controller
     }
     
 
-    public function exportarphp($codigo){
+    public function exportarphp($codigo) {
         // Obtener el proyecto
         $proyecto = Proyecto::where('codigo', $codigo)->first();
     
         // Obtener los atributos del proyecto
         $nombreProyecto = $proyecto->nombre;
         $contenidoProyecto = $proyecto->content;
+    
+        // Verificar si el contenido XML es válido
+        if (!$this->isXMLContentValid($contenidoProyecto)) {
+            // Manejar el caso de contenido XML no válido
+            // Puedes mostrar un mensaje de error o tomar otra acción
+            return "Error: El contenido XML no es válido.";
+        }
     
         // Parsear el contenido XML del proyecto
         $xml = simplexml_load_string($contenidoProyecto);
@@ -141,25 +148,44 @@ class ProyectoController extends Controller
         $phpCode .= "class $nombreProyecto {\n";
     
         foreach ($cells as $cell) {
-            $id = (string) $cell['id'];
-            $value = (string) $cell['value'];
-            $style = (string) $cell['style'];
-            $geometry = $cell->mxGeometry->attributes();
+            $style = (string) $cell->attributes()->style;
+            $value = (string) $cell->attributes()->value;
     
-            // Crear instancias de objetos basados en las lifelines
-            if (strpos($style, 'umlLifeline') !== false) {
-                $phpCode .= "\n\t// Object instance for lifeline $id: $value\n";
-                $phpCode .= "\tprivate \$$value$id;\n";
-                $phpCode .= "\t// Geometry: x=" . $geometry['x'] . ", y=" . $geometry['y'] . ", width=" . $geometry['width'] . ", height=" . $geometry['height'] . "\n";
-            }
-    
-            // Crear instancias de métodos basados en las flechas (edges)
-            if (strpos($style, 'edge') !== false) {
-                $source = (string) $cell->mxGeometry->mxPoint[0]->attributes()->{'x'};
-                $target = (string) $cell->mxGeometry->mxPoint[1]->attributes()->{'x'};
-                $methodName = "method$id"; // Nombre del método basado en el ID
-                $phpCode .= "\n\t// Method instance for arrow $id\n";
-                $phpCode .= "\tpublic function $methodName() {\n\t\t// Logic for arrow from $source to $target\n\t}\n";
+            // Verificar si el nodo es un umlFrame
+            if (strpos($style, "shape=umlFrame") !== false) {
+                // Generar el método void con el nombre igual al valor del nodo umlFrame
+                $phpCode .= "\n\t// Método void representando el umlFrame $value\n";
+                $phpCode .= "\tpublic function $value(\$x) {\n";
+                $phpCode .= "\t\t// Lógica para el umlFrame $value\n";
+                $phpCode .= "\t\tif (\$x == '$value') {\n";
+                $phpCode .= "\t\t\t// Código para la opción $value\n";
+                $phpCode .= "\t\t} else {\n";
+                $phpCode .= "\t\t\t// Código para las demás opciones\n";
+                $phpCode .= "\t\t}\n";
+                $phpCode .= "\t}\n";
+            } else if (strpos($style, "endArrow=block") !== false) {
+                // Si el estilo incluye "endArrow=block", trata este nodo como una flecha de mensaje
+                // Generar un método void con el nombre igual al valor del nodo
+                $phpCode .= "\n\t// Método void representando una flecha de mensaje $value\n";
+                $phpCode .= "\tpublic function $value() {\n";
+                $phpCode .= "\t\t// Lógica para la flecha de mensaje $value\n";
+                $phpCode .= "\t}\n";
+            } else if (strpos($style, "umlLifeline") !== false) {
+                // Si el estilo incluye "umlLifeline", trata este nodo como una clase
+                $phpCode .= "\n\t// Clase representando la lifeline $value\n";
+                $phpCode .= "\tclass $value {\n";
+                $phpCode .= "\t\t// Propiedades y métodos de la clase $value\n";
+                $phpCode .= "\t}\n";
+            } else if (strpos($style, "umlActor") !== false) {
+                // Si el estilo incluye "umlActor", trata este nodo como una clase
+                $phpCode .= "\n\t// Clase representando el actor $value\n";
+                $phpCode .= "\tclass $value {\n";
+                $phpCode .= "\t\t// Propiedades y métodos de la clase $value\n";
+                $phpCode .= "\t}\n";
+            } else {
+                // Otros nodos o estilos pueden manejarse aquí según sea necesario
+                // Por ahora, solo los ignoraremos
+                continue;
             }
         }
     
@@ -168,13 +194,21 @@ class ProyectoController extends Controller
         // Devolver el código PHP generado
         return $phpCode;
     }
-    public function exportarpython($codigo){
+    
+    public function exportarpython($codigo) {
         // Obtener el proyecto
         $proyecto = Proyecto::where('codigo', $codigo)->first();
     
         // Obtener los atributos del proyecto
         $nombreProyecto = $proyecto->nombre;
         $contenidoProyecto = $proyecto->content;
+    
+        // Verificar si el contenido XML es válido
+        if (!$this->isXMLContentValid($contenidoProyecto)) {
+            // Manejar el caso de contenido XML no válido
+            // Puedes mostrar un mensaje de error o tomar otra acción
+            return "Error: El contenido XML no es válido.";
+        }
     
         // Parsear el contenido XML del proyecto
         $xml = simplexml_load_string($contenidoProyecto);
@@ -185,33 +219,44 @@ class ProyectoController extends Controller
         $pythonCode .= "class $nombreProyecto:\n";
     
         foreach ($cells as $cell) {
-            $id = (string) $cell['id'];
-            $value = (string) $cell['value'];
-            $style = (string) $cell['style'];
-            $geometry = $cell->mxGeometry->attributes();
+            $style = (string) $cell->attributes()->style;
+            $value = (string) $cell->attributes()->value;
     
-            // Crear instancias de objetos basados en las lifelines
-            if (strpos($style, 'umlLifeline') !== false) {
-                $pythonCode .= "\n\t# Object instance for lifeline $id: $value\n";
-                $pythonCode .= "\tdef __init__(self):\n";
-                $pythonCode .= "\t\tself.$value$id = None\n";
-                $pythonCode .= "\t\t# Geometry: x=" . $geometry['x'] . ", y=" . $geometry['y'] . ", width=" . $geometry['width'] . ", height=" . $geometry['height'] . "\n";
+            // Verificar si el nodo es un umlFrame
+            if (strpos($style, "shape=umlFrame") !== false) {
+                // Generar la función con el nombre igual al valor del nodo umlFrame
+                $pythonCode .= "    def $value(self, x):\n";
+                $pythonCode .= "        # Bloque if-else para cada opción dentro del umlFrame\n";
+                $pythonCode .= "        if x == \"$value\":\n";
+                $pythonCode .= "            # Código para la opción $value\n";
+                $pythonCode .= "        else:\n";
+                $pythonCode .= "            # Código para las demás opciones\n";
+            } else if (strpos($style, "endArrow=block") !== false) {
+                // Si el estilo incluye "endArrow=block", trata este nodo como una flecha de mensaje
+                // Generar una función con el nombre igual al valor del nodo
+                $pythonCode .= "    def $value(self):\n";
+                $pythonCode .= "        pass\n"; // No hay lógica específica en este caso
+            } else if (strpos($style, "umlLifeline") !== false) {
+                // Si el estilo incluye "umlLifeline", trata este nodo como una clase
+                $pythonCode .= "    class $value:\n";
+            } else if (strpos($style, "umlActor") !== false) {
+                // Si el estilo incluye "umlActor", trata este nodo como una clase
+                $pythonCode .= "    class $value:\n";
+            } else {
+                // Otros nodos o estilos pueden manejarse aquí según sea necesario
+                // Por ahora, solo los ignoraremos
+                continue;
             }
     
-            // Crear instancias de métodos basados en las flechas (edges)
-            if (strpos($style, 'edge') !== false) {
-                $source = (string) $cell->mxGeometry->mxPoint[0]->attributes()->{'x'};
-                $target = (string) $cell->mxGeometry->mxPoint[1]->attributes()->{'x'};
-                $methodName = "method$id"; // Nombre del método basado en el ID
-                $pythonCode .= "\n\t# Method instance for arrow $id\n";
-                $pythonCode .= "\tdef $methodName(self):\n";
-                $pythonCode .= "\t\t# Logic for arrow from $source to $target\n";
-            }
+            // Cierre de la declaración de clase o función
+            $pythonCode .= "\n";
+    
         }
     
         // Devolver el código Python generado
         return $pythonCode;
     }
+    
     
 
     
